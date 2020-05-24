@@ -32,7 +32,8 @@ class GenerateBusiness
 
         $defaultPath = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR . $class . '.php';
         // if class file do not exits, then  generate virtual path
-        $virtualPath = base_path($defaultPath);
+        // 这里有命名空间的问题，默认的命名空间App目录名是app，所以需要把首字母进行小写处理
+        $virtualPath = base_path(lcfirst($defaultPath));
         $isNewFile   = file_exists($virtualPath) ? false : true;
         // if file exists
         // generate new content
@@ -53,7 +54,7 @@ class GenerateBusiness
             'content'        => rawurlencode($content),
             'origin_content' => $content,
             'diff_content'   => rawurlencode($diffContent),
-            'is_diff'        => $diffContent ? 'y' : 'n'
+            'is_diff'        => $diffContent ? 'y' : 'n',
         ];
     }
 
@@ -86,7 +87,7 @@ class GenerateBusiness
             'content'        => rawurlencode($content),
             'origin_content' => $content,
             'diff_content'   => rawurlencode($diffContent),
-            'is_diff'        => $diffContent ? 'y' : 'n'
+            'is_diff'        => $diffContent ? 'y' : 'n',
         ];
     }
 
@@ -110,7 +111,7 @@ class GenerateBusiness
         } else {
             $fields  = [
                 '//-----routes append-----' => $fields['{{routes}}'],
-                '//-----menus append-----'  => $fields['{{menus}}']
+                '//-----menus append-----'  => $fields['{{menus}}'],
             ];
             $content = str_replace(array_keys($fields), array_values($fields), $currentContent);
         }
@@ -128,14 +129,14 @@ class GenerateBusiness
             'content'        => rawurlencode($content),
             'origin_content' => $content,
             'diff_content'   => rawurlencode($diffContent),
-            'is_diff'        => $diffContent ? 'y' : 'n'
+            'is_diff'        => $diffContent ? 'y' : 'n',
         ];
     }
 
     public static function handleRouteFile($appendContent, $routeType)
     {
         // 根据控制器寻找view
-        $defaultPath = 'routes' .DIRECTORY_SEPARATOR. $routeType . '.php';
+        $defaultPath = 'routes' . DIRECTORY_SEPARATOR . $routeType . '.php';
         $virtualPath = base_path($defaultPath);
 
         $isNewFile = file_exists($virtualPath) ? false : true;
@@ -159,7 +160,7 @@ class GenerateBusiness
             'content'        => rawurlencode($content),
             'origin_content' => $content,
             'diff_content'   => rawurlencode($diffContent),
-            'is_diff'        => $diffContent ? 'y' : 'n'
+            'is_diff'        => $diffContent ? 'y' : 'n',
         ];
     }
 
@@ -195,7 +196,7 @@ class GenerateBusiness
                 } catch (\Exception $exception) {
                     $files[$key]['status'] = [
                         'type'    => 'error',
-                        'message' => $exception->getMessage()
+                        'message' => $exception->getMessage(),
                     ];
                 }
             } else {
@@ -209,14 +210,14 @@ class GenerateBusiness
                 } catch (\Exception $exception) {
                     $files[$key]['status'] = [
                         'type'    => 'error',
-                        'message' => $exception->getMessage()
+                        'message' => $exception->getMessage(),
                     ];
                 }
             }
 
             $files[$key]['status'] = [
                 'type'    => 'success',
-                'message' => ''
+                'message' => '',
             ];
         }
 
